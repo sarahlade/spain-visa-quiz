@@ -1,0 +1,128 @@
+import React, { useState } from "react";
+
+const VisaQuiz = () => {
+  const [step, setStep] = useState(1);
+  const [answers, setAnswers] = useState({});
+  const [result, setResult] = useState("");
+
+  const handleAnswer = (question, answer) => {
+    const newAnswers = { ...answers, [question]: answer };
+    setAnswers(newAnswers);
+
+    // Move to the next question
+    if (question === "purpose") {
+      if (answer === "work") setStep(5);
+      else if (answer === "freelance") setStep(6);
+      else if (answer === "study") setStep(7);
+      else if (answer === "retirement") setStep(8);
+      else if (answer === "family") setStep(9);
+      else setStep(99); // No clear visa option
+    } else if (question === "jobOffer") {
+      setResult(answer === "yes" ? "Work Visa" : "Job Seeker Visa");
+      setStep(100);
+    } else if (question === "businessPlan") {
+      setResult(answer === "yes" ? "Self-Employed Visa" : "Further preparation needed");
+      setStep(100);
+    } else if (question === "studentAccepted") {
+      setResult(answer === "yes" ? "Student Visa" : "You need an acceptance letter first");
+      setStep(100);
+    } else if (question === "retirementFunds") {
+      setResult(answer === "yes" ? "Non-Lucrative Visa" : "Need financial proof");
+      setStep(100);
+    } else if (question === "familyInSpain") {
+      setResult(answer === "eu" ? "Family Reunification Visa" : "Alternative visa required");
+      setStep(100);
+    } else {
+      setStep(step + 1);
+    }
+  };
+
+  return (
+    <div style={{ fontFamily: "Arial", padding: "20px", maxWidth: "600px", margin: "auto" }}>
+      <h2>Find Your Spain Visa</h2>
+      
+      {step === 1 && (
+        <div>
+          <p>What is your nationality?</p>
+          <button onClick={() => handleAnswer("nationality", "eu")}>EU/EEA/Swiss</button>
+          <button onClick={() => handleAnswer("nationality", "non-eu")}>Non-EU</button>
+        </div>
+      )}
+
+      {step === 2 && (
+        <div>
+          <p>Are you moving alone or with family?</p>
+          <button onClick={() => handleAnswer("family", "alone")}>Alone</button>
+          <button onClick={() => handleAnswer("family", "with-family")}>With Family</button>
+        </div>
+      )}
+
+      {step === 3 && (
+        <div>
+          <p>What is your main purpose for moving to Spain?</p>
+          <button onClick={() => handleAnswer("purpose", "work")}>Work</button>
+          <button onClick={() => handleAnswer("purpose", "freelance")}>Start a business/freelance</button>
+          <button onClick={() => handleAnswer("purpose", "study")}>Study</button>
+          <button onClick={() => handleAnswer("purpose", "retirement")}>Retirement</button>
+          <button onClick={() => handleAnswer("purpose", "family")}>Join a family member</button>
+          <button onClick={() => handleAnswer("purpose", "other")}>Other</button>
+        </div>
+      )}
+
+      {step === 5 && (
+        <div>
+          <p>Do you have a job offer from a Spanish company?</p>
+          <button onClick={() => handleAnswer("jobOffer", "yes")}>Yes</button>
+          <button onClick={() => handleAnswer("jobOffer", "no")}>No</button>
+        </div>
+      )}
+
+      {step === 6 && (
+        <div>
+          <p>Do you have a business plan and financial proof?</p>
+          <button onClick={() => handleAnswer("businessPlan", "yes")}>Yes</button>
+          <button onClick={() => handleAnswer("businessPlan", "no")}>No</button>
+        </div>
+      )}
+
+      {step === 7 && (
+        <div>
+          <p>Have you been accepted into a Spanish institution?</p>
+          <button onClick={() => handleAnswer("studentAccepted", "yes")}>Yes</button>
+          <button onClick={() => handleAnswer("studentAccepted", "no")}>No</button>
+        </div>
+      )}
+
+      {step === 8 && (
+        <div>
+          <p>Do you have sufficient funds to support yourself without working?</p>
+          <button onClick={() => handleAnswer("retirementFunds", "yes")}>Yes</button>
+          <button onClick={() => handleAnswer("retirementFunds", "no")}>No</button>
+        </div>
+      )}
+
+      {step === 9 && (
+        <div>
+          <p>Is your family member in Spain an EU citizen or a legal resident?</p>
+          <button onClick={() => handleAnswer("familyInSpain", "eu")}>Yes</button>
+          <button onClick={() => handleAnswer("familyInSpain", "no")}>No</button>
+        </div>
+      )}
+
+      {step === 99 && (
+        <div>
+          <p>It seems like your situation doesn't fit a standard visa. Consider consulting an immigration expert.</p>
+        </div>
+      )}
+
+      {step === 100 && (
+        <div>
+          <h3>Your Recommended Visa:</h3>
+          <p>{result}</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default VisaQuiz;
